@@ -5,7 +5,7 @@ TRAIN:
   EVAL_PERIOD: 6
   CHECKPOINT_PERIOD: 6
   AUTO_RESUME: True
-  CHECKPOINT_FILE_PATH: SLOWFAST_8x8_R50.pkl # please download from the model zoo.
+  CHECKPOINT_FILE_PATH: ./checkpoints/kinetics400/SLOWFAST_8x8_R50.pkl # please download from the model zoo.
   CHECKPOINT_TYPE: caffe2
 DATA:
   NUM_FRAMES: 64

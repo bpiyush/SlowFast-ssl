@@ -4,7 +4,7 @@ repo="$( dirname $(dirname $parent))"
 export PYTHONPATH=$repo
 
 # get inputs from the user
-while getopts "c:n:" OPTION; do
+while getopts "c:n:b:" OPTION; do
     case $OPTION in
         c) cfg=$OPTARG;;
         n) num_gpus=$OPTARG;;
