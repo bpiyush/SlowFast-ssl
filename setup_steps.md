@@ -42,6 +42,8 @@ bash download_annotations.sh
 
 ### Data preparation for Charades
 
+This, overall, takes about 2 hours.
+
 1. Symlink the data folder
 ```sh
 ln -s /ssd/pbagad/datasets/charades data/charades
