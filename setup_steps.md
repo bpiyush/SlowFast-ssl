@@ -39,6 +39,7 @@ bash extract_frames.sh
 bash download_annotations.sh
 ```
 
+6. Setup exception videos that may have failed the first time. For me, there was this video `I8j6Xq2B5ys.mp4` that failed the first time. See `scripts/prepare-ava/exception.sh` to re-run the steps for such videos.
 
 ### Data preparation for Charades
 
