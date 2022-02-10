@@ -38,3 +38,22 @@ bash extract_frames.sh
 ```sh
 bash download_annotations.sh
 ```
+
+
+### Data preparation for Charades
+
+1. Symlink the data folder
+```sh
+ln -s /ssd/pbagad/datasets/charades data/charades
+```
+
+2. Download and unzip RGB frames
+```sh
+cd scripts/prepare-charades/
+bash download_data.sh
+```
+
+3. Download the split files
+```sh
+bash download_annotations.sh
+```
