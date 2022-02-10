@@ -101,6 +101,7 @@ class AVAMeter(object):
                 "_type": "{}_iter".format(self.mode),
                 "cur_epoch": "{}".format(cur_epoch + 1),
                 "cur_iter": "{}".format(cur_iter + 1),
+                "overall_iter": "{}".format(self.overall_iters),
                 "eta": eta,
                 "dt": self.iter_timer.seconds(),
                 "dt_data": self.data_timer.seconds(),
@@ -114,6 +115,7 @@ class AVAMeter(object):
                 "_type": "{}_iter".format(self.mode),
                 "cur_epoch": "{}".format(cur_epoch + 1),
                 "cur_iter": "{}".format(cur_iter + 1),
+                "overall_iter": "{}".format(self.overall_iters),
                 "eta": eta,
                 "dt": self.iter_timer.seconds(),
                 "dt_data": self.data_timer.seconds(),
@@ -124,6 +126,7 @@ class AVAMeter(object):
             stats = {
                 "_type": "{}_iter".format(self.mode),
                 "cur_iter": "{}".format(cur_iter + 1),
+                "overall_iter": "{}".format(self.overall_iters),
                 "eta": eta,
                 "dt": self.iter_timer.seconds(),
                 "dt_data": self.data_timer.seconds(),
