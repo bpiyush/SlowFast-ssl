@@ -69,4 +69,5 @@ python tools/run_net.py \
     AVA.FRAME_DIR $FRAME_DIR \
     AVA.FRAME_LIST_DIR $FRAME_LIST_DIR \
     AVA.ANNOTATION_DIR $ANNOTATION_DIR \
+    TEST.BATCH_SIZE $num_gpus \
     > $logs_dir/train_logs.txt 

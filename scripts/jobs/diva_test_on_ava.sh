@@ -1,4 +1,4 @@
-# helper script to run sample training run
+# helper script to run sample evaluation on AVA test set
 parent="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 repo="$( dirname $(dirname $parent))"
 export PYTHONPATH=$repo
@@ -46,7 +46,7 @@ logs_dir=$output_dir/logs/
 mkdir -p $logs_dir
 
 # set the checkpoint
-ckpt="checkpoint_best.pkl"
+ckpt="checkpoint_epoch_00019.pyth"
 ckpt_path=$output_dir/checkpoints/$ckpt
 
 # display metadata
@@ -72,7 +72,7 @@ FRAME_LIST_DIR="/ssd/pbagad/datasets/AVA/annotations/"
 ANNOTATION_DIR="/ssd/pbagad/datasets/AVA/annotations/"
 
 # run evaluation
-python tools/run_net.py \
+python -W ignore tools/run_net.py \
     --cfg $cfg \
     --init_method tcp://localhost:9997 \
     NUM_GPUS $num_gpus \
@@ -82,7 +82,12 @@ python tools/run_net.py \
     AVA.FRAME_DIR $FRAME_DIR \
     AVA.FRAME_LIST_DIR $FRAME_LIST_DIR \
     AVA.ANNOTATION_DIR $ANNOTATION_DIR \
+    AVA.EXCLUSION_FILE "ava_test_excluded_timestamps_v2.2.csv" \
+    AVA.GROUNDTRUTH_FILE "ava_test_v2.2.csv" \
+    AVA.TEST_LISTS "test.csv" \
+    AVA.TEST_PREDICT_BOX_LISTS "person_box_67091280_iou90/ava_detection_test_boxes_and_labels.csv" \
     TEST.CHECKPOINT_FILE_PATH $ckpt_path \
     TRAIN.ENABLE False \
     TEST.ENABLE True \
+    TEST.BATCH_SIZE $num_gpus \
     > $logs_dir/val_logs_$ckpt.txt
