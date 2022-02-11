@@ -426,6 +426,10 @@ def train(cfg):
 
     # Build the video model and print model statistics.
     model = build_model(cfg)
+    print("::::: Model :::::")
+    print(model)
+    print("")
+    
     if du.is_master_proc() and cfg.LOG_MODEL_INFO:
         misc.log_model_info(model, cfg, use_train_input=True)
 
@@ -442,6 +446,19 @@ def train(cfg):
     # Create the video train and val loaders.
     train_loader = loader.construct_loader(cfg, "train")
     val_loader = loader.construct_loader(cfg, "val")
+
+    print(":::::: Training sample ::::::::")
+    train_dataset = train_loader.dataset
+    imgs, label_arrs, idx, extra_data = train_dataset[0]
+    print("Image: ", imgs[0].shape)
+    print("")
+
+    print(":::::: Validation sample ::::::::")
+    val_dataset = val_loader.dataset
+    imgs, label_arrs, idx, extra_data = val_dataset[0]
+    print("Image: ", imgs[0].shape)
+    print("")
+    
     precise_bn_loader = (
         loader.construct_loader(cfg, "train", is_precise_bn=True)
         if cfg.BN.USE_PRECISE_STATS

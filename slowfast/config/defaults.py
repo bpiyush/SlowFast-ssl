@@ -276,7 +276,7 @@ _C.MODEL.NUM_CLASSES = 400
 _C.MODEL.LOSS_FUNC = "cross_entropy"
 
 # Model architectures that has one single pathway.
-_C.MODEL.SINGLE_PATHWAY_ARCH = ["2d", "c2d", "i3d", "slow", "x3d", "mvit"]
+_C.MODEL.SINGLE_PATHWAY_ARCH = ["2d", "c2d", "i3d", "slow", "x3d", "mvit", "r2plus1d_18"]
 
 # Model architectures that has multiple pathways.
 _C.MODEL.MULTI_PATHWAY_ARCH = ["slowfast"]
@@ -296,6 +296,8 @@ _C.MODEL.HEAD_ACT = "softmax"
 # Activation checkpointing enabled or not to save GPU memory.
 _C.MODEL.ACT_CHECKPOINT = False
 
+# Whether to load pretrained backbone (e.g. R2Plus1D).
+_C.MODEL.PRETRAINED = True
 
 # -----------------------------------------------------------------------------
 # MViT options

@@ -26,13 +26,13 @@ if [ "$num_gpus" ==  "" ];then
        num_gpus=4
 fi
 
-# set batch size as 60 if not specified
+# set batch size as 32 if not specified
 if [ "$batch_size" ==  "" ];then
-       batch_size=60
+       batch_size=32
 fi
 
-# set num workers to be 2
-num_workers=2
+# set num workers to be 2*num_gpus
+num_workers=$(($num_gpus*2))
 
 echo "::::::::::::::: Running training for $cfg :::::::::::::::"
 
@@ -59,7 +59,7 @@ echo ":: Number of workers: $num_workers"
 echo ":: Repository: $repo"
 
 # run training
-python tools/run_net.py \
+python -W ignore tools/run_net.py \
     --cfg $cfg \
     --init_method tcp://localhost:9998 \
     NUM_GPUS $num_gpus \
