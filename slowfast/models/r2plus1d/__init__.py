@@ -89,10 +89,10 @@ class R2Plus1D(nn.Module):
 
 if __name__ == "__main__":
     
-    from os.path import join, abspath
     from tools.run_net import parse_args, load_config
 
     # load cfg
+    from os.path import join, abspath
     args = parse_args()
     args.cfg_file = join(abspath(__file__), "../../../../configs/AVA/R2PLUS1D/16x4_R18_SHORT_v2.2.yaml")
     cfg = load_config(args)

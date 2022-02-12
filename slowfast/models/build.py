@@ -29,6 +29,9 @@ MODEL_REGISTRY._do_register("GDTBase", GDTBase)
 from slowfast.models.pretext_contrast import PretextContrast
 MODEL_REGISTRY._do_register("PretextContrast", PretextContrast)
 
+from slowfast.models.rspnet import RSPNet
+MODEL_REGISTRY._do_register("RSPNet", RSPNet)
+
 
 def build_model(cfg, gpu_id=None):
     """
