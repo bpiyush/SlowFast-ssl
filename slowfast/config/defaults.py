@@ -299,6 +299,9 @@ _C.MODEL.ACT_CHECKPOINT = False
 # Whether to load pretrained backbone (e.g. R2Plus1D).
 _C.MODEL.PRETRAINED = True
 
+# Path to the pretrained model (for VSSL models).
+_C.MODEL.CKPT = None
+
 # -----------------------------------------------------------------------------
 # MViT options
 # -----------------------------------------------------------------------------
