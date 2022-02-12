@@ -26,6 +26,9 @@ MODEL_REGISTRY._do_register("AVID_CMA", AVID_CMA)
 from slowfast.models.gdt import GDTBase
 MODEL_REGISTRY._do_register("GDTBase", GDTBase)
 
+from slowfast.models.pretext_contrast import PretextContrast
+MODEL_REGISTRY._do_register("PretextContrast", PretextContrast)
+
 
 def build_model(cfg, gpu_id=None):
     """
