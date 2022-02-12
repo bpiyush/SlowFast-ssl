@@ -38,6 +38,9 @@ MODEL_REGISTRY._do_register("SELAVI", SELAVI)
 from slowfast.models.tclr import TCLR
 MODEL_REGISTRY._do_register("TCLR", TCLR)
 
+from slowfast.models.videomoco import VideoMoCo
+MODEL_REGISTRY._do_register("VideoMoCo", VideoMoCo)
+
 
 def build_model(cfg, gpu_id=None):
     """
