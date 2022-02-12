@@ -32,6 +32,9 @@ MODEL_REGISTRY._do_register("PretextContrast", PretextContrast)
 from slowfast.models.rspnet import RSPNet
 MODEL_REGISTRY._do_register("RSPNet", RSPNet)
 
+from slowfast.models.selavi import SELAVI
+MODEL_REGISTRY._do_register("SELAVI", SELAVI)
+
 
 def build_model(cfg, gpu_id=None):
     """
