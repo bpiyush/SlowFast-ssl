@@ -35,6 +35,9 @@ MODEL_REGISTRY._do_register("RSPNet", RSPNet)
 from slowfast.models.selavi import SELAVI
 MODEL_REGISTRY._do_register("SELAVI", SELAVI)
 
+from slowfast.models.tclr import TCLR
+MODEL_REGISTRY._do_register("TCLR", TCLR)
+
 
 def build_model(cfg, gpu_id=None):
     """
