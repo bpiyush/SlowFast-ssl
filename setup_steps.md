@@ -94,11 +94,11 @@ cd /path/to/repo/
 conda activate slowfast-gpu
 
 # Run training
-bash scripts/jobs/das5_train_on_ava.sh -c configs/AVA/CTP/das5_32x2_112x112_R18_v2.2.yaml
+bash scripts/jobs/das5_train_on_ava.sh -c configs/AVA/CTP/das5_32x2_112x112_R18_v2.2.yaml -b 32
 
 # Run evaluation after training is complete
 bash scripts/jobs/das5_test_on_ava.sh -c configs/AVA/CTP/das5_32x2_112x112_R18_v2.2.yaml
 ```
 
-* Changing batch size: In case the default batch size does not fit GPU memory, you can change it by passing `-b BATCH_SIZE` to the above command.
+* Changing batch size: In case the default batch size does not fit GPU memory, you can change it by passing `-b BATCH_SIZE` to the above command. For 32 frames, I have used batch size as 32.
 * Changing number of GPUs can be done using `-n` argument.
