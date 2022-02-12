@@ -60,3 +60,45 @@ bash download_data.sh
 ```sh
 bash download_annotations.sh
 ```
+
+### Running experiments
+
+Suppose you want to run an experiment with the following config on DAS-5:
+```sh
+cfg=configs/AVA/CTP/das5_32x2_112x112_R18_v2.2.yaml
+```
+
+Note that this config has checkpoint path on DAS-5 machine. In case you want to run the experiment on your machine, you need to change the path to your checkpoint in the config. Ideally, you should create a new config with this change.
+```yaml
+MODEL:
+  CKPT: /path/to/your/checkpoint
+```
+
+We run training and evaluation by a job script such as `scripts/jobs/das5_train_on_ava.sh`. For a new machine,
+create a new file and change the following variables in the script. Don't forget to copy data to local SSD. 
+```sh
+# configure output directory
+output_dir=/var/scratch/pbagad/expts/SlowFast-ssl/$expt_folder
+
+# configure data related arguments
+FRAME_DIR="/local-ssd/pbagad/datasets/AVA/frames/"
+FRAME_LIST_DIR="/local-ssd/pbagad/datasets/AVA/annotations/"
+ANNOTATION_DIR="/local-ssd/pbagad/datasets/AVA/annotations/"
+```
+
+Setup and run training (example shown for DAS-5):
+```sh
+cd /path/to/repo/
+
+# On DAS5
+conda activate slowfast-gpu
+
+# Run training
+bash scripts/jobs/das5_train_on_ava.sh -c configs/AVA/CTP/das5_32x2_112x112_R18_v2.2.yaml
+
+# Run evaluation after training is complete
+bash scripts/jobs/das5_test_on_ava.sh -c configs/AVA/CTP/das5_32x2_112x112_R18_v2.2.yaml
+```
+
+* Changing batch size: In case the default batch size does not fit GPU memory, you can change it by passing `-b BATCH_SIZE` to the above command.
+* Changing number of GPUs can be done using `-n` argument.
