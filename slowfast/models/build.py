@@ -20,6 +20,9 @@ MODEL_REGISTRY._do_register("R2Plus1D", R2Plus1D)
 from slowfast.models.ctp import CTP
 MODEL_REGISTRY._do_register("CTP", CTP)
 
+from slowfast.models.avid_cma import AVID_CMA
+MODEL_REGISTRY._do_register("AVID_CMA", AVID_CMA)
+
 
 def build_model(cfg, gpu_id=None):
     """
