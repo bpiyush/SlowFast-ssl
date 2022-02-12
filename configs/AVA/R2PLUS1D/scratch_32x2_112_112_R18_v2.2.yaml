@@ -76,8 +76,8 @@ SOLVER:
 MODEL:
   NUM_CLASSES: 80
   ARCH: r2plus1d_18
-  MODEL_NAME: AVID_CMA
-  CKPT: /home/pbagad/models/checkpoints_pretraining/avid_cma/avid_cma_ckpt-ep20.pth.tar
+  MODEL_NAME: R2Plus1D
+  PRETRAINED: False
   LOSS_FUNC: bce
   DROPOUT_RATE: 0.5
   HEAD_ACT: sigmoid

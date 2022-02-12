@@ -77,7 +77,7 @@ MODEL:
   NUM_CLASSES: 80
   ARCH: R2Plus1D
   MODEL_NAME: CTP
-  CKPT: /home/pbagad/projects/video-ssl-benchmark/checkpoints/CTP_2/Kinetics/pretext_checkpoint/snellius_r2p1d18_ctp_k400_epoch_90.pth
+  CKPT: /home/pbagad/models/checkpoints_pretraining/ctp/snellius_r2p1d18_ctp_k400_epoch_90.pth
   LOSS_FUNC: bce
   DROPOUT_RATE: 0.5
   HEAD_ACT: sigmoid
