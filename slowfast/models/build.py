@@ -23,6 +23,9 @@ MODEL_REGISTRY._do_register("CTP", CTP)
 from slowfast.models.avid_cma import AVID_CMA
 MODEL_REGISTRY._do_register("AVID_CMA", AVID_CMA)
 
+from slowfast.models.gdt import GDTBase
+MODEL_REGISTRY._do_register("GDTBase", GDTBase)
+
 
 def build_model(cfg, gpu_id=None):
     """
