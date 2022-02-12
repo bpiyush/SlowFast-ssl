@@ -1,3 +1,5 @@
+# Base config: configs/AVA/SLOW_8x8_R50_SHORT.yaml
+
 TRAIN:
   ENABLE: True
   DATASET: ava
