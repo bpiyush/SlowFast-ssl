@@ -62,7 +62,7 @@ class R2Plus1D(nn.Module):
             self.head = head_helper.ResNetBasicHead(
                 dim_in=[512],
                 num_classes=cfg.MODEL.NUM_CLASSES,
-                pool_size=[[4, 7, 7]],
+                pool_size=[[cfg.DATA.NUM_FRAMES // 8, 7, 7]],
                 dropout_rate=cfg.MODEL.DROPOUT_RATE,
                 act_func=cfg.MODEL.HEAD_ACT,
             )
@@ -142,11 +142,11 @@ if __name__ == "__main__":
     ## check only classification
     print(":::: Test without detection on Charades ::::")
 
-    args.cfg_file = join(abspath(__file__), "../../../../configs/Charades/R2PLUS1D/32x2_112x112_R18.yaml")
+    args.cfg_file = join(abspath(__file__), "../../../../configs/Charades/R2PLUS1D/64x2_112x112_R18.yaml")
     cfg = load_config(args)
 
     cfg.DETECTION.ENABLE = False
-    cfg.DATA.NUM_FRAMES = 32
+    cfg.DATA.NUM_FRAMES = 64
 
     # load model
     model = R2Plus1D(cfg)

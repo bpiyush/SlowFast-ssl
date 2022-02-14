@@ -43,6 +43,7 @@ git clone https://github.com/facebookresearch/detectron2 detectron2_repo
 pip install -e detectron2_repo
 pip install scikit-learn
 pip install pyhocon
+pip install ipdb
 
 echo "::: $GREEN Done! $REMOVE_ALL"
 
