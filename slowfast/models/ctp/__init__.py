@@ -181,7 +181,6 @@ if __name__ == "__main__":
     
     print("::: Testing multi-label classification with Charades ...")
     # load cfg
-    args = parse_args()
     args.cfg_file = join(abspath(__file__), "../../../../configs/Charades/CTP/das6_32x8_112x112_R18.yaml")
     cfg = load_config(args)
 
