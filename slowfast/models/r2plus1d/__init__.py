@@ -24,6 +24,7 @@ class R2Plus1D(nn.Module):
         """
         super(R2Plus1D, self).__init__()
         self.num_pathways = 1
+        self.enable_detection = cfg.DETECTION.ENABLE
         self._construct_network(cfg)
 
     def _construct_network(self, cfg):
@@ -34,7 +35,6 @@ class R2Plus1D(nn.Module):
             cfg (CfgNode): model building configs, details are in the
                 comments of the config file.
         """
-        self.enable_detection = cfg.DETECTION.ENABLE
 
         # define the encoder
         pretrained = cfg.MODEL.get("PRETRAINED", True)
