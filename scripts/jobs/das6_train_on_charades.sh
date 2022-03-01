@@ -11,11 +11,12 @@ module load cuda11.1/toolkit/11.1.1
 conda activate slowfast
 
 # get inputs from the user
-while getopts "c:n:b:" OPTION; do
+while getopts "c:n:b:w:" OPTION; do
     case $OPTION in
         c) cfg=$OPTARG;;
         n) num_gpus=$OPTARG;;
         b) batch_size=$OPTARG;;
+        w) num_workers=$OPTARG;;
         *) exit 1 ;;
     esac
 done
@@ -40,7 +41,9 @@ if [ "$batch_size" ==  "" ];then
 fi
 
 # set num workers to be 8
-num_workers=8
+if [ "$num_workers" ==  "" ];then
+       num_workers=8
+fi
 
 echo "::::::::::::::: Running training for $cfg :::::::::::::::"
 
@@ -54,8 +57,10 @@ logs_dir=$output_dir/logs/
 mkdir -p $logs_dir
 
 # configure data paths
-FRAME_DIR="/local/fmthoker/charades/Charades_v1_rgb/"
-FRAME_LIST_DIR="/local/fmthoker/charades/frame_lists/"
+# FRAME_DIR="/local/fmthoker/charades/Charades_v1_rgb/"
+# FRAME_LIST_DIR="/local/fmthoker/charades/frame_lists/"
+FRAME_DIR="/var/scratch/fmthoker/datasets/charades/Charades_v1_rgb/"
+FRAME_LIST_DIR="/var/scratch/fmthoker/datasets/charades/frame_lists/"
 
 # display metadata
 echo ":: Output dir: "$output_dir
