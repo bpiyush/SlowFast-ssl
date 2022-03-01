@@ -32,7 +32,8 @@ if [ "$batch_size" ==  "" ];then
 fi
 
 # set num workers to be 2*num_gpus
-num_workers=$(($num_gpus*2))
+# num_workers=$(($num_gpus*2))
+num_workers=4
 
 echo "::::::::::::::: Running training for $cfg :::::::::::::::"
 
