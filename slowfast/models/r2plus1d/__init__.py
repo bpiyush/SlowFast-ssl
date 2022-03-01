@@ -43,15 +43,19 @@ class R2Plus1D(nn.Module):
         # temporary hardcoding
         # Temporal pooling: [n_frames // 8, 1, 1]
         # this is because R2+1D18 reduces the T dimension by a factor of 8
-        assert cfg.DATA.NUM_FRAMES > 8, "Temporal pooling requires NUM_FRAMES > 8.\
-            Current NUM_FRAMES = {}".format(cfg.DATA.NUM_FRAMES)
+        # if number of frames < 8, then the temporal dimension is 1
+        if cfg.DATA.NUM_FRAMES // 8 > 1:
+            temporal_pool = cfg.DATA.NUM_FRAMES // 8
+        else:
+            temporal_pool = cfg.DATA.NUM_FRAMES
+        print(":::: Using temporal pooling: {}".format(temporal_pool))
 
         if self.enable_detection:
             self.head = head_helper.ResNetRoIHead(
                 dim_in=[512],
                 num_classes=cfg.MODEL.NUM_CLASSES,
                 # pool_size=[[cfg.DATA.NUM_FRAMES // 8, 1, 1]],
-                pool_size=[[cfg.DATA.NUM_FRAMES // 8, 1, 1]],
+                pool_size=[[temporal_pool, 1, 1]],
                 resolution=[[cfg.DETECTION.ROI_XFORM_RESOLUTION] * 2],
                 scale_factor=[cfg.DETECTION.SPATIAL_SCALE_FACTOR],
                 dropout_rate=cfg.MODEL.DROPOUT_RATE,
@@ -62,7 +66,7 @@ class R2Plus1D(nn.Module):
             self.head = head_helper.ResNetBasicHead(
                 dim_in=[512],
                 num_classes=cfg.MODEL.NUM_CLASSES,
-                pool_size=[[cfg.DATA.NUM_FRAMES // 8, 7, 7]],
+                pool_size=[[temporal_pool, 7, 7]],
                 dropout_rate=cfg.MODEL.DROPOUT_RATE,
                 act_func=cfg.MODEL.HEAD_ACT,
             )
@@ -154,3 +158,12 @@ if __name__ == "__main__":
     y = model([x])
     assert y.shape == torch.Size([1, cfg.MODEL.NUM_CLASSES])
     print("Test passed!")
+
+    cfg.DATA.NUM_FRAMES = 1
+
+    # load model
+    model = R2Plus1D(cfg)
+    x = torch.randn(1, 3, cfg.DATA.NUM_FRAMES, 112, 112)
+    y = model([x])
+    assert y.shape == torch.Size([1, cfg.MODEL.NUM_CLASSES])
+    print(f"Test passed!")
