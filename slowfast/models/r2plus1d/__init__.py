@@ -24,6 +24,7 @@ class R2Plus1D(nn.Module):
         """
         super(R2Plus1D, self).__init__()
         self.num_pathways = 1
+        self.enable_detection = cfg.DETECTION.ENABLE
         self._construct_network(cfg)
 
     def _construct_network(self, cfg):
@@ -45,28 +46,36 @@ class R2Plus1D(nn.Module):
         assert cfg.DATA.NUM_FRAMES > 8, "Temporal pooling requires NUM_FRAMES > 8.\
             Current NUM_FRAMES = {}".format(cfg.DATA.NUM_FRAMES)
 
-        self.head = head_helper.ResNetRoIHead(
-            dim_in=[512],
-            num_classes=cfg.MODEL.NUM_CLASSES,
-            # pool_size=[[cfg.DATA.NUM_FRAMES // 8, 1, 1]],
-            pool_size=[[cfg.DATA.NUM_FRAMES // 8, 1, 1]],
-            resolution=[[cfg.DETECTION.ROI_XFORM_RESOLUTION] * 2],
-            scale_factor=[cfg.DETECTION.SPATIAL_SCALE_FACTOR],
-            dropout_rate=cfg.MODEL.DROPOUT_RATE,
-            act_func=cfg.MODEL.HEAD_ACT,
-            aligned=cfg.DETECTION.ALIGNED,
-        )
+        if self.enable_detection:
+            self.head = head_helper.ResNetRoIHead(
+                dim_in=[512],
+                num_classes=cfg.MODEL.NUM_CLASSES,
+                # pool_size=[[cfg.DATA.NUM_FRAMES // 8, 1, 1]],
+                pool_size=[[cfg.DATA.NUM_FRAMES // 8, 1, 1]],
+                resolution=[[cfg.DETECTION.ROI_XFORM_RESOLUTION] * 2],
+                scale_factor=[cfg.DETECTION.SPATIAL_SCALE_FACTOR],
+                dropout_rate=cfg.MODEL.DROPOUT_RATE,
+                act_func=cfg.MODEL.HEAD_ACT,
+                aligned=cfg.DETECTION.ALIGNED,
+            )
+        else:
+            self.head = head_helper.ResNetBasicHead(
+                dim_in=[512],
+                num_classes=cfg.MODEL.NUM_CLASSES,
+                pool_size=[[cfg.DATA.NUM_FRAMES // 8, 7, 7]],
+                dropout_rate=cfg.MODEL.DROPOUT_RATE,
+                act_func=cfg.MODEL.HEAD_ACT,
+            )
 
     def forward(self, x, bboxes=None):
 
-        # y = [] # Don't modify x list in place due to activation checkpoint.
-        # for pathway in range(self.num_pathways):
-        #     y.append(self.encoder(x[pathway]))
-        # x = self.head(y, bboxes)
-
         for pathway in range(self.num_pathways):
             x[pathway] = self.encoder(x[pathway])
-        x = self.head(x, bboxes)
+        
+        if self.enable_detection:
+            x = self.head(x, bboxes)
+        else:
+            x = self.head(x)
 
         return x
 
@@ -94,8 +103,13 @@ if __name__ == "__main__":
     # load cfg
     from os.path import join, abspath
     args = parse_args()
-    args.cfg_file = join(abspath(__file__), "../../../../configs/AVA/R2PLUS1D/16x4_R18_SHORT_v2.2.yaml")
+    args.cfg_file = join(abspath(__file__), "../../../../configs/AVA/R2PLUS1D/32x2_112x112_R18_v2.2.yaml")
     cfg = load_config(args)
+    
+    ## check with detection
+    print()
+    print(":::: Test with detection on AVA ::::")
+    cfg.DETECTION.ENABLE = True
 
     # set number of frames
     cfg.DATA.NUM_FRAMES = 32
@@ -108,7 +122,7 @@ if __name__ == "__main__":
     boxes = torch.randn(5, 4)
     boxes = torch.hstack([torch.zeros(5).view((-1, 1)), boxes])
     y = model([x], boxes)
-    assert y.shape == torch.Size([5, 80])
+    assert y.shape == torch.Size([5, cfg.MODEL.NUM_CLASSES])
 
     # set number of frames
     cfg.DATA.NUM_FRAMES = 16
@@ -121,4 +135,22 @@ if __name__ == "__main__":
     boxes = torch.randn(5, 4)
     boxes = torch.hstack([torch.zeros(5).view((-1, 1)), boxes])
     y = model([x], boxes)
-    assert y.shape == torch.Size([5, 80])
+    assert y.shape == torch.Size([5, cfg.MODEL.NUM_CLASSES])
+    print("Test passed!\n")
+
+
+    ## check only classification
+    print(":::: Test without detection on Charades ::::")
+
+    args.cfg_file = join(abspath(__file__), "../../../../configs/Charades/R2PLUS1D/64x2_112x112_R18.yaml")
+    cfg = load_config(args)
+
+    cfg.DETECTION.ENABLE = False
+    cfg.DATA.NUM_FRAMES = 64
+
+    # load model
+    model = R2Plus1D(cfg)
+    x = torch.randn(1, 3, cfg.DATA.NUM_FRAMES, 112, 112)
+    y = model([x])
+    assert y.shape == torch.Size([1, cfg.MODEL.NUM_CLASSES])
+    print("Test passed!")
