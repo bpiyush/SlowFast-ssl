@@ -44,7 +44,7 @@ class R2Plus1D(nn.Module):
         # Temporal pooling: [n_frames // 8, 1, 1]
         # this is because R2+1D18 reduces the T dimension by a factor of 8
         # if number of frames < 8, then the temporal dimension is 1
-        if cfg.DATA.NUM_FRAMES // 8 > 1:
+        if cfg.DATA.NUM_FRAMES // 8 >= 1:
             temporal_pool = cfg.DATA.NUM_FRAMES // 8
         else:
             temporal_pool = cfg.DATA.NUM_FRAMES
@@ -160,6 +160,15 @@ if __name__ == "__main__":
     print("Test passed!")
 
     cfg.DATA.NUM_FRAMES = 1
+
+    # load model
+    model = R2Plus1D(cfg)
+    x = torch.randn(1, 3, cfg.DATA.NUM_FRAMES, 112, 112)
+    y = model([x])
+    assert y.shape == torch.Size([1, cfg.MODEL.NUM_CLASSES])
+    print(f"Test passed!")
+
+    cfg.DATA.NUM_FRAMES = 8
 
     # load model
     model = R2Plus1D(cfg)
