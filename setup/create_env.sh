@@ -16,9 +16,26 @@ else
     echo "::: conda is installed with version $(conda --version)"
 fi
 
-echo "::: $YELLOW Creating conda environment ... $REMOVE_ALL"
-conda create -y -n slowfast python=3.9
-conda activate slowfast
+ENV_NAME=$1
+if [ -z "$ENV_NAME" ]
+then
+    ENV_NAME="slowfast"
+fi
+
+echo "::: $YELLOW Creating conda environment $ENV_NAME ... $REMOVE_ALL"
+
+conda create -y -n $ENV_NAME python=3.9
+
+# initialize conda to be able to activate the environment
+# get conda path
+conda_path="$(which conda)"
+# get dirname of dirname of conda path
+conda_dir="$(dirname $(dirname $conda_path))"
+echo "Conda home: $conda_dir"
+source $conda_dir/etc/profile.d/conda.sh
+
+# activate the environment
+conda activate $ENV_NAME
 
 echo "::: $YELLOW Installing torch-packages ... $REMOVE_ALL"
 # check your apt pytorch version
@@ -48,8 +65,8 @@ pip install ipdb
 echo "::: $GREEN Done! $REMOVE_ALL"
 
 echo "::: $YELLOW Testing the environment: $REMOVE_ALL"
-conda activate slowfast
-python -c "import torch; print('Torch: 'torch.__version__)"
-python -c "import torchvision; print('Torchvision: 'torchvision.__version__)"
-python -c "import torchaudio; print('Torchaudio: 'torchaudio.__version__)"
-python -c "import detectron2; print('detectron2: 'detectron2.__version__)"
+conda activate $ENV_NAME
+python -c "import torch; print('Torch:', torch.__version__)"
+python -c "import torchvision; print('Torchvision:', torchvision.__version__)"
+python -c "import torchaudio; print('Torchaudio:', torchaudio.__version__)"
+python -c "import detectron2; print('detectron2:', detectron2.__version__)"
