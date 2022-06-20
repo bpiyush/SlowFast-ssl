@@ -8,11 +8,12 @@ repo="$( dirname $(dirname $parent))"
 export PYTHONPATH=$repo
 
 # get inputs from the user
-while getopts "c:n:b:" OPTION; do
+while getopts "c:n:b:o:" OPTION; do
     case $OPTION in
         c) cfg=$OPTARG;;
         n) num_gpus=$OPTARG;;
         b) batch_size=$OPTARG;;
+        o) base_outdir=$OPTARG;;
         *) exit 1 ;;
     esac
 done
@@ -45,7 +46,9 @@ expt_folder="${cfg%.yaml}"
 IFS='/' read -r -a array <<< $expt_folder
 expt_folder="${array[-2]}--${array[-1]}"
 
-base_outdir=$repo/outputs/
+if [ "$base_outdir" ==  "" ];then
+       base_outdir=$repo/outputs/
+fi
 mkdir -p $base_outdir
 
 output_dir=$base_outdir/$expt_folder/
