@@ -335,6 +335,12 @@ if __name__ == "__main__":
     
     # Load model
     model = load_backbone("r2plus1d_18", "scratch")
+    
+    # fully supervised
+    model = load_backbone(
+        "r2plus1d_18", "supervised",
+        ckpt_path="/home/pbagad/models/checkpoints_pretraining/full_supervision/r2plus1d_18-91a641e6.pth",
+    )
 
     # Print summary
     # summary(model.to(device), (3, 16, 112, 112))
@@ -401,3 +407,4 @@ if __name__ == "__main__":
         "CTP",
         ckpt_path="/home/pbagad/models/checkpoints_pretraining/ctp/snellius_r2p1d18_ctp_k400_epoch_90.pth",
     )
+    import ipdb; ipdb.set_trace()

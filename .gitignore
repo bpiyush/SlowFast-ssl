@@ -13,3 +13,4 @@ groundtruth_latest.csv
 checkpoints/
 
 detectron2_repo/
+outputs/

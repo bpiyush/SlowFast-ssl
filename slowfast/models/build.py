@@ -44,6 +44,12 @@ MODEL_REGISTRY._do_register("VideoMoCo", VideoMoCo)
 from slowfast.models.moco import MOCO
 MODEL_REGISTRY._do_register("MOCO", MOCO)
 
+from slowfast.models.vssl import VSSL
+MODEL_REGISTRY._do_register("VSSL", VSSL)
+
+# single script to build all models
+from slowfast.backbones import load_backbone
+
 
 def build_model(cfg, gpu_id=None):
     """
@@ -65,6 +71,11 @@ def build_model(cfg, gpu_id=None):
     # Construct the model
     name = cfg.MODEL.MODEL_NAME
     model = MODEL_REGISTRY.get(name)(cfg)
+    # model = load_backbone(
+    #     backbone="r2plus1d_18",
+    #     init_method=name,
+    #     ckpt_path=cfg.MODEL.get("CKPT", None),
+    # )
 
     if cfg.NUM_GPUS:
         if gpu_id is None:

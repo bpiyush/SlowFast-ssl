@@ -25,9 +25,11 @@ class VSSL(nn.Module):
     def _construct_network(self, cfg):
 
         # define the encoder
+        print("\nConstructing VSSL backbone...")
+        print(f"Initializing backbone by {cfg.MODEL.INIT_METHOD}...\n")
         backbone = load_backbone(
             backbone=cfg.MODEL.ARCH,
-            init_method=cfg.MODEL.MODEL_NAME,
+            init_method=cfg.MODEL.INIT_METHOD,
             ckpt_path=cfg.MODEL.get("CKPT", None),
         )
         self.encoder = nn.Sequential(

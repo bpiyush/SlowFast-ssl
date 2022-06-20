@@ -113,3 +113,12 @@ For example, to run training on DAS-5, you can use the following command:
 ```sh
 bash scripts/jobs/train_on_ava.sh -c configs/AVA/CTP/das5_32x2_112x112_R18_v2.2.yaml -b 32 -d /local-ssd/pbagad/datasets/AVA/ -o /var/scratch/pbagad/expts/SlowFast-ssl/
 ```
+
+### Running fine-tuning on Charades
+
+To run fine-tuning on Charades, using `r2plus1d_18` backbone initialized from Kinetics-400 supervised pretraining, we use the following command:
+```sh
+cfg=configs/Charades/R2PLUS1D/32x8_112x112_R18.yaml
+bash scripts/jobs/train_on_charades.sh -c $cfg
+```
+This assumes that you have setup data folders symlinked into the repo. This shall save outputs in `./outputs/` folder.
