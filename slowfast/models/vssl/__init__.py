@@ -32,6 +32,7 @@ class VSSL(nn.Module):
             init_method=cfg.MODEL.INIT_METHOD,
             ckpt_path=cfg.MODEL.get("CKPT", None),
         )
+        # only keep the relevant layers (HARDCODED w.r.t. R2PLUS1D-18)
         self.encoder = nn.Sequential(
             backbone.stem,
             backbone.layer1,
@@ -39,13 +40,6 @@ class VSSL(nn.Module):
             backbone.layer3,
             backbone.layer4,
         )
-        
-        # # diffuse the fully connected layers and avg pooling layer
-        # self.encoder.avgpool = nn.Identity()
-        # self.encoder.fc = nn.Identity()
-
-        # pretrained = cfg.MODEL.get("PRETRAINED", True)
-        # self.encoder = video_resnet.__dict__[cfg.MODEL.ARCH](pretrained=pretrained)
 
         # temporary hardcoding
         # Temporal pooling: [n_frames // 8, 1, 1]
