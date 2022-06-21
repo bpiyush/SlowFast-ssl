@@ -8,13 +8,12 @@ repo="$( dirname $(dirname $parent))"
 export PYTHONPATH=$repo
 
 # get inputs from the user
-while getopts "c:n:b:o:p:" OPTION; do
+while getopts "c:n:b:o:" OPTION; do
     case $OPTION in
         c) cfg=$OPTARG;;
         n) num_gpus=$OPTARG;;
         b) batch_size=$OPTARG;;
         o) base_outdir=$OPTARG;;
-        p) port=$OPTARG;;
         *) exit 1 ;;
     esac
 done
@@ -34,12 +33,7 @@ fi
 
 # set batch size as 12 if not specified
 if [ "$batch_size" ==  "" ];then
-       batch_size=12
-fi
-
-# set default port
-if [ "$port" ==  "" ];then
-       port=9998
+       batch_size=64
 fi
 
 # set num workers to be 2
@@ -62,6 +56,10 @@ mkdir -p $output_dir
 logs_dir=$output_dir/logs/
 mkdir -p $logs_dir
 
+ckpt_name=checkpoint_epoch_00057.pyth
+ckpt_path=$output_dir/checkpoints/$ckpt_name
+
+
 # configure data paths
 FRAME_DIR="./data/charades/Charades_v1_rgb/"
 FRAME_LIST_DIR="./data/charades/frame_lists/"
@@ -69,6 +67,7 @@ FRAME_LIST_DIR="./data/charades/frame_lists/"
 # display metadata
 echo ":: Output dir: "$output_dir
 echo ":: Data picked from: $(dirname $FRAME_DIR)"
+echo ":: Path to checkpoint: $ckpt_path"
 echo ":: Number of GPUs: $num_gpus"
 echo ":: Batch size: $batch_size"
 echo ":: Number of workers: $num_workers"
@@ -77,11 +76,14 @@ echo ":: Repository: $repo"
 # run training
 python -W ignore tools/run_net.py \
     --cfg $cfg \
-    --init_method tcp://localhost:$port \
+    --init_method tcp://localhost:9997 \
     NUM_GPUS $num_gpus \
-    TRAIN.BATCH_SIZE $batch_size \
+    TEST.CHECKPOINT_FILE_PATH $ckpt_path \
+    TRAIN.ENABLE False \
+    TEST.ENABLE True \
+    TEST.BATCH_SIZE $batch_size \
     DATA_LOADER.NUM_WORKERS $num_workers \
     OUTPUT_DIR $output_dir \
     DATA.PATH_PREFIX $FRAME_DIR \
     DATA.PATH_TO_DATA_DIR $FRAME_LIST_DIR \
-    > $logs_dir/train_logs.txt 
+    > $logs_dir/val_logs_$ckpt_name.txt 

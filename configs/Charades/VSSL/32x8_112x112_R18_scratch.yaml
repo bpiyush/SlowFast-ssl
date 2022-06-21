@@ -55,8 +55,9 @@ SOLVER:
 MODEL:
   NUM_CLASSES: 157
   ARCH: r2plus1d_18
-  MODEL_NAME: R2Plus1D
-  # CKPT: /home/pbagad/models/checkpoints_pretraining/full_supervision/r2plus1d_18-91a641e6.pth
+  MODEL_NAME: VSSL
+  INIT_METHOD: scratch
+  CKPT: null
   LOSS_FUNC: bce_logit
   HEAD_ACT: sigmoid
   DROPOUT_RATE: 0.5
