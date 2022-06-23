@@ -302,6 +302,9 @@ _C.MODEL.PRETRAINED = True
 # Path to the pretrained model (for VSSL models).
 _C.MODEL.CKPT = None
 
+# VSSL initialization method
+_C.MODEL.INIT_METHOD = None
+
 # -----------------------------------------------------------------------------
 # MViT options
 # -----------------------------------------------------------------------------

@@ -11,3 +11,6 @@ groundtruth_latest.csv
 
 # checkpoints
 checkpoints/
+
+detectron2_repo/
+outputs/
