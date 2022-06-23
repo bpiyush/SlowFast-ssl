@@ -11,6 +11,14 @@
     ```sh
     conda activate slowfast-charades
     ```
+* Symlink the dataset folder. Suppose Charades and AVA datasets are stored inside `/path/to/datasets/`. Then, run the following from the repo:
+    ```sh
+    ln -s /path/to/datasets data
+    ```
+* Symlink the pre-trained models for initialization. Suppose all your VSSL pre-trained checkpoints are at `/path/to/checkpoints_pretraining`
+    ```sh
+    ls -s /path/to/checkpoints_pretraining checkpoints_pretraining
+    ```
 
 
 ## Experiments on Charades
