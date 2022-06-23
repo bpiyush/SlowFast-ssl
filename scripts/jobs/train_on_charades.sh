@@ -74,12 +74,15 @@ echo ":: Batch size: $batch_size"
 echo ":: Number of workers: $num_workers"
 echo ":: Repository: $repo"
 
+test_batch_size=$((3 * $num_gpus))
+
 # run training
 python -W ignore tools/run_net.py \
     --cfg $cfg \
     --init_method tcp://localhost:$port \
     NUM_GPUS $num_gpus \
     TRAIN.BATCH_SIZE $batch_size \
+    TEST.BATCH_SIZE $test_batch_size \
     DATA_LOADER.NUM_WORKERS $num_workers \
     OUTPUT_DIR $output_dir \
     DATA.PATH_PREFIX $FRAME_DIR \
