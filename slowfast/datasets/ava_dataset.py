@@ -5,11 +5,11 @@ import logging
 import numpy as np
 import torch
 
-from . import ava_helper as ava_helper
-from . import cv2_transform as cv2_transform
-from . import transform as transform
-from . import utils as utils
-from .build import DATASET_REGISTRY
+from slowfast.datasets import ava_helper as ava_helper
+from slowfast.datasets import cv2_transform as cv2_transform
+from slowfast.datasets import transform as transform
+from slowfast.datasets import utils as utils
+from slowfast.datasets.build import DATASET_REGISTRY
 
 logger = logging.getLogger(__name__)
 
@@ -415,6 +415,15 @@ class Ava(torch.utils.data.Dataset):
                     continue
                 assert label >= 1 and label <= 80
                 label_arrs[i][label - 1] = 1
+        
+        # aggregate labels if doing classification
+        if not self.cfg.DETECTION.ENABLE:
+            dtype = label_arrs.dtype
+            label_arrs = np.sum(label_arrs, axis=0)
+            label_arrs = np.where(label_arrs > 0, 1, 0).astype(np.float32)
+            
+            boxes = np.sum(boxes, axis=0, keepdims=True)
+            ori_boxes = np.sum(ori_boxes, axis=0, keepdims=True)
 
         imgs = utils.pack_pathway_output(self.cfg, imgs)
         metadata = [[video_idx, sec]] * len(boxes)
@@ -426,3 +435,42 @@ class Ava(torch.utils.data.Dataset):
         }
 
         return imgs, label_arrs, idx, extra_data
+
+
+if __name__ == "__main__":
+    from os.path import abspath, join
+
+    from tools.run_net import parse_args, load_config
+    
+    cfg_path = join(
+        abspath(__file__),
+        "../../../configs/AVA/R2PLUS1D/action_recognition_32x2_112x112_R18_v2.2.yaml",
+    )
+
+    FRAME_DIR="/var/scratch/pbagad/datasets/AVA/frames/"
+    FRAME_LIST_DIR="/var/scratch/pbagad/datasets/AVA/annotations/"
+    ANNOTATION_DIR="/var/scratch/pbagad/datasets/AVA/annotations/"
+
+    args = parse_args()
+    args.cfg_file = cfg_path
+    cfg = load_config(args)
+    
+    cfg.AVA.FRAME_DIR = FRAME_DIR
+    cfg.AVA.FRAME_LIST_DIR = FRAME_LIST_DIR
+    cfg.AVA.ANNOTATION_DIR = ANNOTATION_DIR
+
+    cfg.DETECTION.ENABLE = True
+    cfg.DATA.NUM_FRAMES = 64
+
+    # load dataset
+    dataset = Ava(cfg, "train")
+    imgs, label_arrs, idx, extra_data = dataset[0]
+    assert label_arrs.shape == (11, 80)
+
+    cfg.DETECTION.ENABLE = False
+    cfg.DATA.NUM_FRAMES = 64
+
+    # load dataset
+    dataset = Ava(cfg, "train")
+    imgs, label_arrs, idx, extra_data = dataset[0]
+    assert label_arrs.shape == (80,)
