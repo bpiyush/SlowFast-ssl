@@ -42,8 +42,8 @@ if [ "$port" ==  "" ];then
        port=9998
 fi
 
-# set num workers to be 2
-num_workers=2
+# set num workers to be 8
+num_workers=8
 
 echo "::::::::::::::: Running training for $cfg :::::::::::::::"
 
