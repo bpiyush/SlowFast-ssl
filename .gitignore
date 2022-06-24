@@ -1,5 +1,7 @@
 # Data
 data/
+data
+checkpoints_pretraining
 
 # Python
 __pycache__/
