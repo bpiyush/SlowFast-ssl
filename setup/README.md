@@ -37,4 +37,6 @@ bash scripts/jobs/train_on_charades.sh -c $cfg
 This assumes that you have setup data folders symlinked into the repo. This shall save outputs in `./outputs/` folder. You can check `./outputs/<expt-folder-name>/logs/train_logs.txt` to see the training progress.
 
 
+Note that, on Charades, we obtain all our results using 1 GPU and a batch size of 16.
+
 ### Evaluating a fine-tuned VSSL model

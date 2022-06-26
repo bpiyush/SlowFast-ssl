@@ -56,8 +56,8 @@ MODEL:
   NUM_CLASSES: 157
   ARCH: r2plus1d_18
   MODEL_NAME: VSSL
-  INIT_METHOD: scratch
-  CKPT: null
+  INIT_METHOD: supervised
+  CKPT: ./checkpoints_pretraining/full_supervision/r2plus1d_18-91a641e6.pth
   LOSS_FUNC: bce_logit
   HEAD_ACT: sigmoid
   DROPOUT_RATE: 0.5
@@ -72,6 +72,6 @@ DATA_LOADER:
   PIN_MEMORY: True
 NUM_GPUS: 8
 NUM_SHARDS: 1
-RNG_SEED: 1
+RNG_SEED: 3
 OUTPUT_DIR: .
 LOG_MODEL_INFO: False
