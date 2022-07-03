@@ -35,14 +35,12 @@ fi
 
 # check output directory
 if [ "$base_output_dir" ==  "" ];then
-       echo "Output dir is a required argument; Please use -o <path to output dir> to pass output dir."
-       exit
+       base_output_dir=$repo/outputs/AVA
 fi
 
 # check data root directory
 if [ "$data_dir" ==  "" ];then
-       echo "Data dir is a required argument; Please use -d <path to AVA dataset dir> to pass data dir."
-       exit
+       data_dir=$repo/data/AVA
 fi
 
 # set num workers to be 2*num_gpus
@@ -63,6 +61,12 @@ mkdir -p $logs_dir
 FRAME_DIR="$data_dir/frames/"
 FRAME_LIST_DIR="$data_dir/annotations/"
 ANNOTATION_DIR="$data_dir/annotations/"
+
+# assert if frame directory is empty
+if [ ! -d "$FRAME_DIR" ]; then
+    echo "Frame directory $FRAME_DIR does not exist"
+    exit 1
+fi
 
 # display metadata
 echo ":: Output dir: "$output_dir
