@@ -36,7 +36,9 @@ bash scripts/jobs/train_on_charades.sh -c $cfg
 ```
 This assumes that you have setup data folders symlinked into the repo. This shall save outputs in `./outputs/` folder. You can check `./outputs/<expt-folder-name>/logs/train_logs.txt` to see the training progress.
 
-:warning: Note that, on Charades, we obtain all our results using 1 GPU and a batch size of 16.
+:warning: Note that, on Charades, we obtain all our results using 1 GPU (NVIDIA RTX A600, 48GBs each) and a batch size of 16.
+
+:hourglass: Each experiment takes about 8 hours to run on the suggested configuration.
 
 
 ## Experiments on AVA
@@ -54,4 +56,6 @@ You can check out other configs for fine-tuning with other video self-supervised
 
 The training is followed by an evaluation on the test set. Thus, the numbers will be displayed in logs at the end of the run.
 
-:warning: Note that, on AVA, we train using 4 GPUs and a batch size of 32.
+:warning: Note that, on AVA, we train using 4 GPUs (GeForce GTX 1080 Ti, 11GBs each) and a batch size of 32.
+
+:hourglass: Each experiment takes about 8 hours to run on the suggested configuration.
